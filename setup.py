@@ -8,7 +8,7 @@ readme_content = open("README.md").read()
 
 setup(
     name='pyinsales',
-    version='0.6.0',
+    version='0.6.2',
     description='InSales e-commerce platform API bindings',
     long_description=readme_content,
     author='Victor Nakoryakov',
