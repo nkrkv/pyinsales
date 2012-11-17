@@ -8,7 +8,7 @@ pyinsales — это набор биндингов для API популярно
 Установка
 ---------
 
-`$ pip install insales`
+`$ pip install pyinsales`
 
 Зависимости
 -----------
