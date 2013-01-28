@@ -229,10 +229,6 @@ def parse(xml_string):
     parser = xml.sax.make_parser()
     parser.setContentHandler(processor)
     for line in io:
-        # Hack: InSales doesn't bother about malformed xml
-        # and thus doesn't escampe '&' symbols in URLs
-        # escape'em manually
-        line = re.sub(r'\&([^#])', r'&amp;\1', line)
         parser.feed(line)
 
     return processor.data()
