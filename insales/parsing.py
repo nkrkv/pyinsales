@@ -221,7 +221,9 @@ class XmlProcessor(xml.sax.handler.ContentHandler):
 
 def parse(xml_string):
     processor = XmlProcessor()
-    xml_string = xml_string.encode('utf-8')
+    if isinstance(xml_string, unicode):
+        xml_string = xml_string.encode('utf-8')
+
     io = StringIO(xml_string)
 
     parser = xml.sax.make_parser()
