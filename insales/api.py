@@ -19,8 +19,8 @@ class InSalesApi(object):
     }
 
     @classmethod
-    def from_credentials(cls, account, api_key, password):
-        return cls(Connection(account, api_key, password))
+    def from_credentials(cls, account, api_key, password, **kwargs):
+        return cls(Connection(account, api_key, password, **kwargs))
 
     def __init__(self, connection):
         self.connection = connection

@@ -3,6 +3,8 @@
 import datetime
 import urlparse
 import urllib
+import time
+import socket
 
 from base64 import b64encode
 from httplib import HTTPConnection
@@ -15,10 +17,14 @@ class ApiError(Exception):
 
 
 class Connection(object):
-    def __init__(self, account, api_key, password):
+    def __init__(self, account, api_key, password,
+                 retry_on_503=False, retry_on_socket_error=False, retry_timeout=1):
         self.account = account
         self.api_key = api_key
         self.password = password
+        self.retry_on_503 = retry_on_503
+        self.retry_on_socket_error = retry_on_socket_error
+        self.retry_timeout = retry_timeout
 
     def request(self, method, endpoint, qargs={}, data=None):
         path = self.format_path(endpoint, qargs)
@@ -28,9 +34,26 @@ class Connection(object):
             'Authorization': 'Basic %s' % auth,
             'Content-Type': 'application/xml'
         }
-        conn.request(method, path, headers=headers, body=data)
-        resp = conn.getresponse()
-        body = resp.read()
+
+        done = False
+        while not done:
+            try:
+                conn.request(method, path, headers=headers, body=data)
+            except socket.gaierror:
+                if self.retry_on_socket_error:
+                    time.sleep(self.retry_timeout)
+                    continue
+                else:
+                    raise
+
+            resp = conn.getresponse()
+            body = resp.read()
+
+            if resp.status == 503 and self.retry_on_503:
+                time.sleep(self.retry_timeout)
+            else:
+                done = True
+
         if 200 <= resp.status < 300:
             return body
         else:
