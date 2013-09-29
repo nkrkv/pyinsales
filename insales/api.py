@@ -26,6 +26,18 @@ class InSalesApi(object):
         self.connection = connection
 
     #========================================================================
+    # Клиенты
+    #========================================================================
+    def get_clients(self, per_page=25, page=1):
+        """
+        per_page на данный момент игнорируется платформой. Отдает 25 независимо от значения per_page 
+        """
+        return self._get('admin/clients.xml', {'per_page': per_page, 'page': page}) or []
+        
+    def get_client(self, client_id):
+        return self._get('/admin/clients/%s.xml' % client_id)
+
+    #========================================================================
     # Заказы
     #========================================================================
     def get_orders(self, per_page=25, page=1):
