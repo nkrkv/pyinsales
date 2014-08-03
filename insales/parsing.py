@@ -3,7 +3,7 @@
 from decimal import Decimal
 from collections import deque
 from copy import copy
-from cStringIO import StringIO
+from io import BytesIO
 
 import xml.sax
 import xml.sax.handler
@@ -216,15 +216,12 @@ class XmlProcessor(xml.sax.handler.ContentHandler):
     def data(self):
         top_dict = self._handler_stack[0].value
         if top_dict:
-            return top_dict.values()[0]
+            return list(top_dict.values())[0]
 
 
 def parse(xml_string):
     processor = XmlProcessor()
-    if isinstance(xml_string, unicode):
-        xml_string = xml_string.encode('utf-8')
-
-    io = StringIO(xml_string)
+    io = BytesIO(xml_string)
 
     parser = xml.sax.make_parser()
     parser.setContentHandler(processor)

@@ -1,13 +1,21 @@
 # -*- coding: utf-8; -*-
 
 import datetime
-import urlparse
-import urllib
 import time
 import socket
 
 from base64 import b64encode
-from httplib import HTTPConnection
+
+try:
+    # Python 3
+    from urllib import parse as urlparse
+    from urllib.parse import urlencode
+    from http.client import HTTPConnection
+except ImportError:
+    # Python 2
+    import urlparse
+    from httplib import HTTPConnection
+    from urllib import urlencode
 
 
 class ApiError(Exception):
@@ -29,9 +37,9 @@ class Connection(object):
     def request(self, method, endpoint, qargs={}, data=None):
         path = self.format_path(endpoint, qargs)
         conn = HTTPConnection('%s.myinsales.ru:80' % self.account)
-        auth = b64encode("%s:%s" % (self.api_key, self.password))
+        auth = b64encode(u"{0}:{1}".format(self.api_key, self.password).encode('utf-8')).decode('utf-8')
         headers = {
-            'Authorization': 'Basic %s' % auth,
+            'Authorization': 'Basic {0}'.format(auth),
             'Content-Type': 'application/xml'
         }
 
@@ -68,7 +76,7 @@ class Connection(object):
         url_parts = list(urlparse.urlparse(endpoint))
         query = dict(urlparse.parse_qsl(url_parts[4]))
         query.update(qargs)
-        url_parts[4] = urllib.urlencode(query)
+        url_parts[4] = urlencode(query)
 
         return urlparse.urlunparse(url_parts)
 
