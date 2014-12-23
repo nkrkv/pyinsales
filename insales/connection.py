@@ -26,17 +26,19 @@ class ApiError(Exception):
 
 class Connection(object):
     def __init__(self, account, api_key, password,
-                 retry_on_503=False, retry_on_socket_error=False, retry_timeout=1):
+                 retry_on_503=False, retry_on_socket_error=False,
+                 retry_timeout=1, response_timeout=10):
         self.account = account
         self.api_key = api_key
         self.password = password
         self.retry_on_503 = retry_on_503
         self.retry_on_socket_error = retry_on_socket_error
         self.retry_timeout = retry_timeout
+        self.response_timeout = response_timeout
 
     def request(self, method, endpoint, qargs={}, data=None):
         path = self.format_path(endpoint, qargs)
-        conn = HTTPConnection('%s.myinsales.ru:80' % self.account)
+        conn = HTTPConnection('%s.myinsales.ru:80' % self.account, timeout=self.response_timeout)
         auth = b64encode(u"{0}:{1}".format(self.api_key, self.password).encode('utf-8')).decode('utf-8')
         headers = {
             'Authorization': 'Basic {0}'.format(auth),
@@ -47,7 +49,7 @@ class Connection(object):
         while not done:
             try:
                 conn.request(method, path, headers=headers, body=data)
-            except socket.gaierror:
+            except (socket.gaierror, socket.timeout):
                 if self.retry_on_socket_error:
                     time.sleep(self.retry_timeout)
                     continue
