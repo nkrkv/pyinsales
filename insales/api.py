@@ -232,6 +232,26 @@ class InSalesApi(object):
         return self._delete('/admin/collects/%s.xml' % collect_id)
 
     #========================================================================
+    # Аналогичные товары
+    #========================================================================
+    def get_similars(self, product_id):
+        return self._get('/admin/products/%s/similars.xml' % product_id) or []
+
+    def delete_similar(self, product_id, similar_product_id):
+        return self._delete('/admin/products/%s/similars/%s.xml' %
+                            (product_id, similar_product_id))
+
+    #========================================================================
+    # Сопутствующие товары
+    #========================================================================
+    def get_supplementaries(self, product_id):
+        return self._get('/admin/products/%s/supplementaries.xml' % product_id) or []
+
+    def delete_supplementary(self, product_id, supplementary_product_id):
+        return self._delete('/admin/products/%s/supplementaries/%s.xml' %
+                            (product_id, supplementary_product_id))
+
+    #========================================================================
     # Веб-хуки
     #========================================================================
     def get_webhooks(self):
