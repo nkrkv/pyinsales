@@ -10,11 +10,11 @@ try:
     # Python 3
     from urllib import parse as urlparse
     from urllib.parse import urlencode
-    from http.client import HTTPConnection
+    from http.client import HTTPConnection, HTTPException
 except ImportError:
     # Python 2
     import urlparse
-    from httplib import HTTPConnection
+    from httplib import HTTPConnection, HTTPException
     from urllib import urlencode
 
 
@@ -49,15 +49,14 @@ class Connection(object):
         while not done:
             try:
                 conn.request(method, path, headers=headers, body=data)
-            except (socket.gaierror, socket.timeout):
+                resp = conn.getresponse()
+                body = resp.read()
+            except (socket.gaierror, socket.timeout, HTTPException):
                 if self.retry_on_socket_error:
                     time.sleep(self.retry_timeout)
                     continue
                 else:
                     raise
-
-            resp = conn.getresponse()
-            body = resp.read()
 
             if resp.status == 503 and self.retry_on_503:
                 time.sleep(self.retry_timeout)
