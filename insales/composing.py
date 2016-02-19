@@ -6,6 +6,17 @@ import xml.etree.ElementTree as et
 
 from decimal import Decimal
 
+# Python 2, 3 intercompatibility
+try:
+    basestring
+except NameError:
+    basestring = str
+
+try:
+    long
+except NameError:
+    long = int
+
 def compose(data, root, arrays={}):
     root_e = compose_element(root, data, arrays)
     return et.tostring(root_e, 'utf-8')
@@ -31,7 +42,7 @@ def compose_element(key, value, arrays={}):
         for x in value:
             e.append(compose_element(e_key, x, arrays))
     elif isinstance(value, collections.Mapping):
-        for key, value in value.iteritems():
+        for key, value in value.items():
             e.append(compose_element(key, value, arrays))
     else:
         raise TypeError("Value %r has unsupported type %s" % (value, type(value)))
