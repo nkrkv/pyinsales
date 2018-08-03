@@ -32,7 +32,7 @@ def compose_element(key, value, arrays={}):
         e.attrib['type'] = 'decimal'
         e.text = str(value)
     elif isinstance(value, datetime.datetime):
-        e.attrib['type'] = 'timestamp'
+        e.attrib['type'] = 'dateTime'
         e.text = value.strftime("%Y-%m-%d %H:%M:%S %z")
     elif value is None:
         e.attrib['nil'] = 'true'
