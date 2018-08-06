@@ -175,6 +175,13 @@ class TimestampHandler(ElementHandler):
         string = self.date_re.sub(r"+\1:\2", content.strip())
         self.value = iso8601.parse_date(string)
 
+class DateTimeHandler(ElementHandler):
+    type_name = 'dateTime'
+    default = None
+
+    def on_content(self, content):
+        self.value = iso8601.parse_date(content.strip())
+
 
 all_handlers = [
     NoTypeHandler,
@@ -183,6 +190,7 @@ all_handlers = [
     DecimalHandler,
     BooleanHandler,
     DateHandler,
+    DateTimeHandler,
     TimestampHandler,
 ]
 
@@ -209,7 +217,7 @@ class XmlProcessor(xml.sax.handler.ContentHandler):
     def endElement(self, name):
         h = self._handler_stack.pop()
         self._handler_stack[-1].on_nested_end(name, h)
-    
+
     def characters(self, content):
         self._handler_stack[-1].on_content(content)
 

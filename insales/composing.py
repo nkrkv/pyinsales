@@ -32,8 +32,8 @@ def compose_element(key, value, arrays={}):
         e.attrib['type'] = 'decimal'
         e.text = str(value)
     elif isinstance(value, datetime.datetime):
-        e.attrib['type'] = 'timestamp'
-        e.text = value.strftime("%Y-%m-%d %H:%M:%S %z")
+        e.attrib['type'] = 'dateTime'
+        e.text = value.replace(microsecond=0).isoformat()
     elif value is None:
         e.attrib['nil'] = 'true'
     elif isinstance(value, collections.Sequence):

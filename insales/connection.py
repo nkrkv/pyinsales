@@ -66,13 +66,13 @@ class Connection(object):
         if 200 <= resp.status < 300:
             return body
         else:
-            raise ApiError("%s request to %s returned: %s\n%s" % 
+            raise ApiError("%s request to %s returned: %s\n%s" %
                            (method, path, resp.status, body), resp.status)
 
     def format_path(self, endpoint, qargs):
         for key, val in qargs.items():
             if isinstance(val, datetime.datetime):
-                qargs[key] = val.strftime('%Y-%m-%d+%H:%M:%S')
+                qargs[key] = val.replace(microsecond=0).isoformat()
 
         url_parts = list(urlparse.urlparse(endpoint))
         query = dict(urlparse.parse_qsl(url_parts[4]))
