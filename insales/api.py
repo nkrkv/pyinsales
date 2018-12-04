@@ -28,8 +28,14 @@ class InSalesApi(object):
     #========================================================================
     # Заказы
     #========================================================================
-    def get_orders(self, per_page=25, page=1):
-        return self._get('/admin/orders.xml', {'per_page': per_page, 'page': page}) or []
+    def get_orders(self, per_page=25, page=1, updated_since=None):
+        qargs = {
+            'per_page': per_page,
+            'page': page
+        }
+        if updated_since:
+            qargs['updated_since'] = updated_since
+        return self._get('/admin/orders.xml', qargs) or []
 
     def get_order(self, order_id):
         return self._get('/admin/orders/%s.xml' % order_id)
