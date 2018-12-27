@@ -154,7 +154,7 @@ REST-endpoint’ом со стороны InSales для данного конк�
 #========================================================================
 # Заказы
 #========================================================================
-get_orders(self, per_page=25, page=1):
+get_orders(self, per_page=25, page=1, updated_since=None):
 get_order(self, order_id):
 update_order(self, order_id, order_data):
 delete_order(self, order_id):
