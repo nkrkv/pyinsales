@@ -38,7 +38,6 @@ class Connection(object):
 
     def request(self, method, endpoint, qargs={}, data=None):
         path = self.format_path(endpoint, qargs)
-        conn = HTTPConnection('%s.myinsales.ru:80' % self.account, timeout=self.response_timeout)
         auth = b64encode(u"{0}:{1}".format(self.api_key, self.password).encode('utf-8')).decode('utf-8')
         headers = {
             'Authorization': 'Basic {0}'.format(auth),
@@ -48,6 +47,8 @@ class Connection(object):
         done = False
         while not done:
             try:
+                conn = HTTPConnection('%s.myinsales.ru:80' % self.account,
+                                      timeout=self.response_timeout)
                 conn.request(method, path, headers=headers, body=data)
                 resp = conn.getresponse()
                 body = resp.read()
