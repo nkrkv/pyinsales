@@ -4,7 +4,8 @@
 from setuptools import setup
 
 install_requires = open("requirements.txt").read().split('\n')
-readme_content = open("README.md").read()
+with open("README.md", 'rb') as f:
+    readme_content = f.read().decode('utf-8')
 
 setup(
     name='pyinsales',
