@@ -9,7 +9,7 @@ with open("README.md", 'rb') as f:
 
 setup(
     name='pyinsales',
-    version='1.3.0',
+    version='1.4.0',
     description='InSales e-commerce platform API bindings',
     long_description=readme_content,
     long_description_content_type="text/markdown",
