@@ -378,6 +378,25 @@ class InSalesApi(object):
                             root='recurring-application-charge')
 
     #========================================================================
+    # Страницы
+    #========================================================================
+    def get_pages(self):
+        return self._get('/admin/pages.xml') or []
+
+    def get_page(self, page_id):
+        return self._get('/admin/pages/%s.xml' % page_id)
+
+    def add_page(self, page_data):
+        return self._add('/admin/pages.xml', page_data, root='page')
+
+    def update_page(self, page_id, page_data):
+        return self._update('/admin/pages/%s.xml' % page_id, page_data,
+                            root='page')
+
+    def delete_page(self, page_id):
+        return self._delete('/admin/pages/%s.xml' % page_id)
+
+    #========================================================================
     def _get(self, endpoint, qargs={}):
         return self._req('get', endpoint, qargs)
 
