@@ -76,9 +76,14 @@ class Connection(object):
                 qargs[key] = val.replace(microsecond=0).isoformat()
 
         url_parts = list(urlparse.urlparse(endpoint))
-        query = dict(urlparse.parse_qsl(url_parts[4]))
-        query.update(qargs)
-        url_parts[4] = urlencode(query)
+        query = urlparse.parse_qsl(url_parts[4])
+        for key, value in qargs.items():
+            if isinstance(value, list):
+                for sub_val in value:
+                    query.append((f"{key}[]", sub_val))
+            else:
+                query.append((key, value))
+        url_parts[4] = urlparse.urlencode(query)
 
         return urlparse.urlunparse(url_parts)
 
