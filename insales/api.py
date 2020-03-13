@@ -230,14 +230,33 @@ class InSalesApi(object):
     #========================================================================
     # Товары
     #========================================================================
-    def get_products(self, limit=50, page=1, updated_since=None):
-        qargs = {
-            'limit': limit,
-            'page': page,
-        }
+    def get_products(
+        self,
+        per_page = 25,
+        page = 1,
+        updated_since = None,
+        from_id = None,
+        category_id = None,
+        collection_id = None,
+        deleted = None,
+        with_deleted = None,
+    ):
+        "Get products: https://api.insales.ru/#product-get-products-xml"
+        # pylint: disable=too-many-arguments
+        qargs = {"per_page": per_page, "page": page}
         if updated_since:
-            qargs['updated_since'] = updated_since
-        return self._get('/admin/products.xml', qargs) or []
+            qargs["updated_since"] = updated_since
+        if from_id is not None:
+            qargs["from_id"] = from_id
+        if category_id:
+            qargs["category_id"] = category_id
+        if collection_id:
+            qargs["collection_id"] = collection_id
+        if deleted:
+            qargs["deleted"] = deleted
+        if with_deleted:
+            qargs["with_deleted"] = with_deleted
+        return self._get("/admin/products.xml", qargs) or []
 
     def get_product(self, product_id):
         return self._get('/admin/products/%s.xml' % product_id)
