@@ -1,5 +1,6 @@
 # -*- coding: utf-8; -*-
 
+import datetime
 from insales.parsing import parse
 from insales.composing import compose
 from insales.connection import Connection
@@ -103,6 +104,22 @@ class InSalesApi(object):
 
     def __init__(self, connection):
         self.connection = connection
+
+    def iterate_over_all(
+        self, method, updated_since=datetime.datetime.fromtimestamp(0), **kwargs
+    ):
+        "Iterate over any method with pagination"
+        mykwargs = dict(kwargs)
+        mykwargs.update({"page": 1, "updated_since": updated_since, "from_id": None})
+
+        while True:
+            objects = method(**mykwargs)
+            if not objects:
+                return
+            for obj in objects:
+                mykwargs["from_id"] = obj.get("id")
+                mykwargs["updated_since"] = obj.get("updated-at")
+                yield obj
 
     #========================================================================
     # Заказы
