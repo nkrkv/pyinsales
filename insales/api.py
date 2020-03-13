@@ -108,13 +108,28 @@ class InSalesApi(object):
     # Заказы
     #========================================================================
     def get_orders(
-        self, per_page=25, page=1, updated_since=None, fulfillment_status=None
+        self,
+        per_page = 25,
+        page = 1,
+        updated_since = None,
+        from_id = None,
+        fulfillment_status = None,
+        delivery_variant = None,
+        payment_gateway_id = None,
     ):
+        "Get orders: https://api.insales.ru/#order-get-orders-xml"
+        # pylint: disable=too-many-arguments
         qargs = {"per_page": per_page, "page": page}
         if updated_since:
             qargs["updated_since"] = updated_since
+        if from_id is not None:
+            qargs["from_id"] = from_id
         if fulfillment_status:
             qargs["fulfillment_status"] = fulfillment_status
+        if delivery_variant:
+            qargs["delivery_variant"] = fulfillment_status
+        if payment_gateway_id:
+            qargs["payment_gateway_id"] = fulfillment_status
         return self._get("/admin/orders.xml", qargs) or []
 
     def get_order(self, order_id):
