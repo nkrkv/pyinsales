@@ -31,6 +31,9 @@ def compose_element(key, value, arrays={}):
     elif isinstance(value, Decimal):
         e.attrib['type'] = 'decimal'
         e.text = str(value)
+    elif isinstance(value, datetime.date):
+        e.attrib['type'] = 'date'
+        e.text = value.isoformat()
     elif isinstance(value, datetime.datetime):
         e.attrib['type'] = 'dateTime'
         e.text = value.replace(microsecond=0).isoformat()
