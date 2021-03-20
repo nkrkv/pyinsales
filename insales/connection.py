@@ -72,8 +72,15 @@ class Connection(object):
         if 200 <= resp.status < 300:
             return body
         else:
-            raise ApiError("%s request to %s returned: %s\n%s" %
-                           (method, path, resp.status, body), resp.status)
+            raise ApiError(
+                "{} request to {} returned: {}\n{}".format(
+                    method,
+                    path,
+                    resp.status,
+                    body.decode('utf-8') if type(body) == bytes else body
+                ),
+                resp.status
+            )
 
     def format_path(self, endpoint, qargs):
         for key, val in qargs.items():
