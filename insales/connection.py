@@ -10,11 +10,11 @@ try:
     # Python 3
     from urllib import parse as urlparse
     from urllib.parse import urlencode
-    from http.client import HTTPConnection, HTTPException
+    from http.client import HTTPConnection, HTTPSConnection, HTTPException
 except ImportError:
     # Python 2
     import urlparse
-    from httplib import HTTPConnection, HTTPException
+    from httplib import HTTPConnection, HTTPSConnection, HTTPException
     from urllib import urlencode
 
 
@@ -26,11 +26,13 @@ class ApiError(Exception):
 
 class Connection(object):
     def __init__(self, account, api_key, password,
+                 secure=False,
                  retry_on_503=False, retry_on_socket_error=False,
                  retry_timeout=1, response_timeout=10):
         self.account = account
         self.api_key = api_key
         self.password = password
+        self.secure = secure
         self.retry_on_503 = retry_on_503
         self.retry_on_socket_error = retry_on_socket_error
         self.retry_timeout = retry_timeout
@@ -47,8 +49,11 @@ class Connection(object):
         done = False
         while not done:
             try:
-                conn = HTTPConnection('%s.myinsales.ru:80' % self.account,
-                                      timeout=self.response_timeout)
+                host = '%s.myinsales.ru' % self.account
+                if self.secure:
+                    conn = HTTPSConnection(host, timeout=self.response_timeout)
+                else:
+                    conn = HTTPConnection(host, timeout=self.response_timeout)
                 conn.request(method, path, headers=headers, body=data)
                 resp = conn.getresponse()
                 body = resp.read()
