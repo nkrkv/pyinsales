@@ -448,6 +448,45 @@ class InSalesApi(object):
     def delete_page(self, page_id):
         return self._delete('/admin/pages/%s.xml' % page_id)
 
+
+    #========================================================================
+    # Блоги
+    #========================================================================
+    def get_blogs(self):
+        return self._get('/admin/blogs.xml') or []
+
+    def get_blog(self, blog_id):
+        return self._get('/admin/blogs/%s.xml' % blog_id)
+
+    def add_blog(self, blog_data):
+        return self._add('/admin/blogs.xml', blog_data, root='blog')
+
+    def update_blog(self, blog_id, blog_data):
+        return self._update('/admin/blogs/%s.xml' % blog_id, blog_data, root='blog')
+
+    def delete_blog(self, blog_id):
+        return self._delete('/admin/blogs/%s.xml' % blog_id)
+
+
+    #========================================================================
+    # Статьи (в блоге)
+    #========================================================================
+    def get_articles(self, blog_id):
+        return self._get('/admin/blogs/%s/articles.xml' % blog_id)
+
+    def get_article(self, blog_id, article_id):
+        return self._get('/admin/blogs/%s/articles/%s.xml' % (blog_id, article_id))
+
+    def add_article(self, blog_id, article_data):
+        return self._add('/admin/blogs/%s/articles.xml' % blog_id, article_data, root='article')
+
+    def update_article(self, blog_id, article_id, article_data):
+        return self._update('/admin/blogs/%s/articles/%s.xml' % (blog_id, article_id), article_data, root='article')
+
+    def delete_article(self, blog_id, article_id):
+        return self._delete('/admin/blogs/%s/articles/%s.xml' % (blog_id, article_id))
+
+
     #========================================================================
     def _get(self, endpoint, qargs={}):
         return self._req('get', endpoint, qargs)
