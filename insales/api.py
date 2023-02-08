@@ -471,8 +471,10 @@ class InSalesApi(object):
     #========================================================================
     # Статьи (в блоге)
     #========================================================================
-    def get_articles(self, blog_id):
-        return self._get('/admin/blogs/%s/articles.xml' % blog_id)
+    def get_articles(self, blog_id, per_page = 10, page = 1):
+        "Get orders: https://api.insales.ru/?doc_format=XML#article-get-articles-list-xml"
+        qargs = {"per_page": per_page, "page": page}
+        return self._get('/admin/blogs/%s/articles.xml' % blog_id, qargs) or []
 
     def get_article(self, blog_id, article_id):
         return self._get('/admin/blogs/%s/articles/%s.xml' % (blog_id, article_id))
