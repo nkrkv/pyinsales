@@ -1,0 +1,40 @@
+[build-system]
+# build the package with [flit](https://flit.readthedocs.io)
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pyinsales"
+version = "1.8.0"
+description = """InSales e-commerce platform API bindings"""
+authors = [{name = "Victor Nakoryakov", email = "nail.xx@gmail.com"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Natural Language :: Russian",
+    "Topic :: Utilities",
+]
+keywords = ["insales", "API", "bindings"]
+requires-python = ">=3.6"
+dependencies = [
+    "iso8601",
+]
+
+[project.optional-dependencies]
+debug = [
+      "wdb",
+]
+release = [
+    "flit",
+]
+
+[project.urls]
+Homepage = "https://github.com/nailxx/pyinsales"
+
+[tool.flit.module]
+name = "insales"
