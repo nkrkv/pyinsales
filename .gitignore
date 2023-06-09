@@ -1,3 +1,7 @@
-*.pyc
-dist
 *.egg-info
+*.pyc
+.env
+.envrc
+dist
+flake.lock
+flake.nix
