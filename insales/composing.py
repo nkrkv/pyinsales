@@ -25,6 +25,9 @@ def compose_element(key, value, arrays={}):
     e = et.Element(key)
     if isinstance(value, basestring):
         e.text = value
+    elif isinstance(value, bool):
+        e.attrib['type'] = 'boolean'
+        e.text = str(value).lower()
     elif isinstance(value, (int, long)):
         e.attrib['type'] = 'integer'
         e.text = str(value)
