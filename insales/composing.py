@@ -1,7 +1,7 @@
 # -*- coding: utf-8; -*-
 
 import datetime
-import collections
+import collections.abc
 import xml.etree.ElementTree as et
 
 from decimal import Decimal
@@ -42,12 +42,12 @@ def compose_element(key, value, arrays={}):
         e.text = value.replace(microsecond=0).isoformat()
     elif value is None:
         e.attrib['nil'] = 'true'
-    elif isinstance(value, collections.Sequence):
+    elif isinstance(value, collections.abc.Sequence):
         e.attrib['type'] = 'array'
         e_key = arrays[key]
         for x in value:
             e.append(compose_element(e_key, x, arrays))
-    elif isinstance(value, collections.Mapping):
+    elif isinstance(value, collections.abc.Mapping):
         for key, value in value.items():
             e.append(compose_element(key, value, arrays))
     else:
