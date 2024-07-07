@@ -7,16 +7,8 @@ import socket
 
 from base64 import b64encode
 
-try:
-    # Python 3
-    from urllib import parse as urlparse
-    from urllib.parse import urlencode
-    from http.client import HTTPConnection, HTTPSConnection, HTTPException
-except ImportError:
-    # Python 2
-    import urlparse
-    from httplib import HTTPConnection, HTTPSConnection, HTTPException
-    from urllib import urlencode
+from urllib import parse as urlparse
+from http.client import HTTPConnection, HTTPSConnection, HTTPException
 
 
 insales_lock = threading.Lock()
