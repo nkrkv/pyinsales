@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "pyinsales"
-version = "1.8.0"
+version = "1.8.1"
 description = """InSales e-commerce platform API bindings"""
 authors = [{name = "Victor Nakoryakov", email = "nail.xx@gmail.com"}]
 readme = "README.md"
